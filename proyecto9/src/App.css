@@ -1,0 +1,56 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #343a40;
+  color: white;
+  padding: 10px 20px;
+}
+
+.menu-container {
+  flex: 1;
+}
+
+.user-profile-container {
+  display: flex;
+  align-items: center;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.user-profile {
+  float: right;
+  margin-right: 20px; /* ajusta el margen a tu gusto */
+  width: 100px; /* ajusta el ancho de la tabla a tu gusto */
+}
+.user-profile div {
+  margin-bottom: 5px;
+}
+
+.container-fluid {
+  padding: 0;
+  flex: 1;
+}
+
+.ContadorClics {
+  height: 50vh; /* Cambiar la altura del componente al 90% de la altura de la ventana del navegador */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+}
+
+
+.container-mantenedor {
+  height: calc(90vh - 100px);
+  overflow-y: scroll;
+}
+
