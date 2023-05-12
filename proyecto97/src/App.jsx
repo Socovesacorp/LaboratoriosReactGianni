@@ -83,7 +83,7 @@ export default function App() {
     <div className="Prueba" >
       <Navbar bg="dark" variant="dark" className="navbarStyle">
         <Navbar.Brand href="#home">
-        &nbsp;&nbsp;<img src={logoCSC} height={50} alt='Empresas Socovesa'/>&nbsp;&nbsp;Autenticación
+        &nbsp;&nbsp;<img src={logoCSC} height={50} alt='Empresas Socovesa'/>&nbsp;&nbsp;Autenticación...
         </Navbar.Brand>
         <div className="collapse navbar-collapse justify-content-end">
           {isAuthenticated ? <SignOutButton /> : <SignInButton />}
