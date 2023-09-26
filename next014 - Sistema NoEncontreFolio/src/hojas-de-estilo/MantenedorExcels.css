@@ -1,0 +1,54 @@
+/* MantenedorExcels.css */
+.custom-data-grid .MuiDataGrid-colCell, .custom-data-grid .MuiDataGrid-columnHeader {
+    background-color: #fbf8f8; /* Cambia el color a tu preferencia */
+    font-weight: 1100; /* Puedes ajustar el valor según tus preferencias (600 generalmente se usa para seminegrita) */
+
+    font-size: 16px; /* Establece el tamaño de fuente para la grilla */
+    color: #1976D2;
+    font-weight: normal; /* Establece la fuente como normal */
+    text-shadow: 0.25px 0 0 #1976D2, 0 0.25px 0 #1976D2, -0.25px 0 0 #1976D2, 0 -0.25px 0 #1976D2; /* Efecto de negrita más ligero */
+  }
+/* Estilo para los botones de paginación '<' y '>' */
+.custom-data-grid .MuiTablePagination-actions button {
+  font-size: 16px; /* Personaliza el tamaño de fuente según tus preferencias */
+  color: #000000; /* Personaliza el color según tus preferencias */
+  margin: 0 5px; /* Personaliza el margen según tus preferencias */
+  margin-top: -15px;
+}
+
+
+
+.popup-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fondo gris semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Asegura que esté por encima del contenido principal */
+}
+
+.subir-solicitudes-flujo-container {
+  background-color: white; /* Color de fondo sólido */
+  padding: 20px; /* Ajusta según tus preferencias de espaciado */
+}
+
+.dark-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
+  z-index: 999; /* Asegura que esté en la parte superior */
+}
+.MuiDataGrid-cell {
+  padding: 0px 0px; /* Ajusta el espaciado en las celdas */
+  font-size: 13px; /* Ajusta el tamaño de fuente en las celdas */
+  /* Otros estilos de celdas */
+}
+
+
