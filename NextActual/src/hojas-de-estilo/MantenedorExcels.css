@@ -1,0 +1,138 @@
+/* MantenedorExcels.css */
+.custom-data-grid .MuiDataGrid-colCell, .custom-data-grid .MuiDataGrid-columnHeader {
+    background-color: #fbf8f8; /* Cambia el color a tu preferencia */
+    font-weight: 1100; /* Puedes ajustar el valor según tus preferencias (600 generalmente se usa para seminegrita) */
+
+    font-size: 16px; /* Establece el tamaño de fuente para la grilla */
+    color: #1976D2;
+    font-weight: normal; /* Establece la fuente como normal */
+    text-shadow: 0.25px 0 0 #1976D2, 0 0.25px 0 #1976D2, -0.25px 0 0 #1976D2, 0 -0.25px 0 #1976D2; /* Efecto de negrita más ligero */
+  }
+/* Estilo para los botones de paginación '<' y '>' */
+.custom-data-grid .MuiTablePagination-actions button {
+  font-size: 16px; /* Personaliza el tamaño de fuente según tus preferencias */
+  color: #000000; /* Personaliza el color según tus preferencias */
+  margin: 0 5px; /* Personaliza el margen según tus preferencias */
+  margin-top: -15px;
+}
+/* Pseudo-elemento para cubrir el área adicional de la cabecera */
+.custom-data-grid .MuiDataGrid-colCell::after,
+.custom-data-grid .MuiDataGrid-columnHeader::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -1000px; /* Ajusta este valor según sea necesario */
+  bottom: 0;
+  width: 10000px; /* Un valor grande para asegurar la cobertura */
+  background-color: #fbf8f8; /* Color de fondo deseado */
+  z-index: -1; /* Asegura que el pseudo-elemento esté detrás del contenido */
+}
+
+
+.popup-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fondo gris semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Asegura que esté por encima del contenido principal */
+}
+
+.subir-solicitudes-flujo-container {
+  background-color: white; /* Color de fondo sólido */
+  padding: 20px; /* Ajusta según tus preferencias de espaciado */
+}
+
+.dark-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
+  z-index: 999; /* Asegura que esté en la parte superior */
+}
+.MuiDataGrid-cell {
+  padding: 0px 0px; /* Ajusta el espaciado en las celdas */
+  font-size: 13px; /* Ajusta el tamaño de fuente en las celdas */
+  /* Otros estilos de celdas */
+}
+
+
+
+
+.suggestions-list-Solicitantes {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  max-height: 100px; /* Establece la altura máxima deseada */
+  overflow-y: auto; /* Agrega una barra de desplazamiento vertical si la lista es larga */
+  background-color: #f1f1f1;
+  width: 500px;
+  position: absolute; /* Establece la posición absoluta */
+  z-index: 1; /* Asegura que la lista aparezca por encima del contenido */
+  /*margin: -10px 0 0 0;*/
+}
+
+.suggestions-list-Solicitantes.hidden {
+  display: none; /* Oculta la lista cuando no está visible */
+}
+
+.suggestions-list-Tareas {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  max-height: 100px; /* Establece la altura máxima deseada */
+  overflow-y: auto; /* Agrega una barra de desplazamiento vertical si la lista es larga */
+  background-color: #f1f1f1;
+  width: 250px;
+  position: absolute; /* Establece la posición absoluta */
+  z-index: 1; /* Asegura que la lista aparezca por encima del contenido */
+  /*margin: -10px 0 0 0;*/
+}
+
+.suggestions-list-Tareas.hidden {
+  display: none; /* Oculta la lista cuando no está visible */
+}
+
+.suggestions-list-Beneficiarios {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  max-height: 100px; /* Establece la altura máxima deseada */
+  overflow-y: auto; /* Agrega una barra de desplazamiento vertical si la lista es larga */
+  background-color: #f1f1f1;
+  width: 500px;
+  position: absolute; /* Establece la posición absoluta */
+  z-index: 1; /* Asegura que la lista aparezca por encima del contenido */
+  /*margin: -10px 0 0 0;*/
+}
+
+.suggestions-list-CentroDeCosto {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  max-height: 180px; /* Establece la altura máxima deseada */
+  overflow-y: auto; /* Agrega una barra de desplazamiento vertical si la lista es larga */
+  background-color: #f1f1f1;
+  width: 500px;
+  position: absolute; /* Establece la posición absoluta */
+  z-index: 1; /* Asegura que la lista aparezca por encima del contenido */
+  /*margin: -10px 0 0 0;*/
+}
+
+.suggestions-list-CentroDeCosto.hidden {
+  display: none; /* Oculta la lista cuando no está visible */
+}
+.suggestions-list-Beneficiarios.hidden {
+  display: none; /* Oculta la lista cuando no está visible */
+}
+
+
+.total-factura-column {
+  background-color: #a3e9a4; /* Cambia el color de fondo de la columna a verde */
+}
