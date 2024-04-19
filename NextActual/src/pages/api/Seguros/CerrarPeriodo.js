@@ -73,8 +73,8 @@ export default async function CerrarPeriodo(req, res) {
                 INSERT INTO Seguros_DescuentosAlPersonal([Cabecera_Id],[Rut],[DV],[Apellido_Nombre],[NIF],[Sociedad],[NombreEmpresa],[CentroCoste],[Denominacion],[Periodo],[TipoSeguro],[Importe])
                 SELECT @Cabecera_Id,[Rut],[DV],[Apellido_Nombre],[NIF],[Sociedad],[NombreEmpresa],[CentroCoste],[Denominacion],[Periodo],[TipoSeguro],[Importe] FROM [Seguros_DescuentosAlPersonalExcel]
 
-                INSERT INTO Seguros_CobroAseguradora([Cabecera_Id],[ContratantePrincipal],[RutEmpresa],[DVEmpresa],[TipoAseg],[Rut_Asegurado],[DV_Asegurado],[NIF_Asegurado],[Nombres],[Ape.Paterno],[Ape.Materno],[Periodo],[Exento],[Afecto],[Iva],[Total])
-                SELECT @Cabecera_Id,[ContratantePrincipal],[RutEmpresa],[DVEmpresa],[TipoAseg],[Rut_Asegurado],[DV_Asegurado],[NIF_Asegurado],[Nombres],[Ape.Paterno],[Ape.Materno],[Periodo],[Exento],[Afecto],[Iva],[Total] FROM [Seguros_CobroAseguradoraExcel]
+                INSERT INTO Seguros_CobroAseguradora([Cabecera_Id],[ContratantePrincipal],[RutEmpresa],[DVEmpresa],[TipoAseg],[Rut_Asegurado],[DV_Asegurado],[NIF_Asegurado],[Nombres],[Ape.Paterno],[Ape.Materno],[Periodo],[Exento],[Afecto],[Iva],[Total],[CentroCoste],[Denominacion])
+                SELECT @Cabecera_Id,[ContratantePrincipal],[RutEmpresa],[DVEmpresa],[TipoAseg],[Rut_Asegurado],[DV_Asegurado],[NIF_Asegurado],[Nombres],[ApePaterno],[ApeMaterno],[Periodo],[Exento],[Afecto],[Iva],[Total],[CentroCoste],[Denominacion] FROM [CobroAseguradoraExcel_Existe] Where Existe='Si' 
 
                 INSERT INTO Seguros_Facturas([Cabecera_Id],[Sociedad_Rut],[Sociedad_RazonSocial],[Sociedad_RutN],[Sociedad_Dv],[Factura_Nro],[Factura_Exento],[Factura_Neto],[Factura_Iva],[Factura_Total],[Sociedad_Id])
                 SELECT @Cabecera_Id,[Sociedad_Rut],[Sociedad_RazonSocial],[Sociedad_RutN],[Sociedad_Dv],[Factura_Nro],[Factura_Exento],[Factura_Neto],[Factura_Iva],[Factura_Total],[Sociedad_Id] FROM [Seguros_FacturasExcel]

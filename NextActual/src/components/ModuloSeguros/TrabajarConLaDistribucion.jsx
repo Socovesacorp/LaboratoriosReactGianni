@@ -77,7 +77,6 @@ const TrabajarConLaDistribucion = (props) => {
             }
         } catch (error) {
             console.error('Error de red:', error);
-            // Maneja el error de red, muestra un mensaje de error o realiza otras acciones necesarias.
         }
         try {
             //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {

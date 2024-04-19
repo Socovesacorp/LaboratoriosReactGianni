@@ -5,6 +5,10 @@ import * as XLSX                                    from 'xlsx';
 import LlamadosApis                                 from '../ManejarDatosApis/LlamadosApis';
 import TrabajarConTrabajadoresHistorico             from './TrabajarConTrabajadoresHistorico';
 import TrabajarConDescuentosHistorico               from './TrabajarConDescuentosHistorico';
+import TrabajarConCobroAseguradoraHistorico         from './TrabajarConCobroAseguradoraHistorico';
+import TrabajarConFacturasHistorico                 from './TrabajarConFacturasHistorico';
+import TrabajarConLoFacturadoHistorico              from './TrabajarConLoFacturadoHistorico';
+import TrabajarConLaDistribucionHistorico           from './TrabajarConLaDistribucionHistorico';
 import CustomActionButton                           from './CustomActionButton';
 import ManejoDatosGrillaMaterialUi                  from '../ManejarDatosGrilla/ManejoDatosGrillaMaterialUi';
 import { format } from 'date-fns';
@@ -21,7 +25,7 @@ const TrabajarConHistoricosSeguros = (props) => {
     const [Accion, setAccion] = useState("");
     const [openAlertaOK, setOpenAlertaOK] = useState({ open: false, message: "" });
 
-    const closePopup = (puedo) => {/*
+    const closePopup = (puedo) => {
         setIsPopupOpen(false);
         if (puedo === 1) {
             setOpenAlertaOK({
@@ -30,35 +34,54 @@ const TrabajarConHistoricosSeguros = (props) => {
             });
             setRowSelectionModel([]);
         }
-        cargarDatos(); */
+        cargarDatos(); 
     };
 
     const CustomModal = ({ closeFunction, contentComponent, popupWidth }) => {
+        const [dragging, setDragging] = useState(false);
+        const [posX, setPosX] = useState(0);
+        const [posY, setPosY] = useState(0);
+
+        const handleMouseDown = (e) => {
+            setDragging(true);
+            setPosX(e.clientX - e.target.getBoundingClientRect().left);
+            setPosY(e.clientY - e.target.getBoundingClientRect().top);
+        };
+
+        const handleMouseUp = () => {
+            setDragging(false);
+        };
+
+        const handleMouseMove = (e) => {
+            if (dragging) {
+                const newX = e.clientX - posX;
+                const newY = e.clientY - posY;
+                e.target.parentNode.style.left = newX + 'px';
+                e.target.parentNode.style.top = newY + 'px';
+            }
+        };
+
         return (
-            <div className="custom-modal" style={{ background: 'white', width: `${popupWidth}px` }}>
-                <div className="modal-content">
-                    {/* Aquí puedes agregar el contenido personalizado */}
-                    {/*<h2>Título del Popup</h2>*/}
-                    {/*<p>Contenido personalizado</p>*/}
-                    <button
-                        onClick={closeFunction}
-                        style={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: '10px',
-                            zIndex: 1,
-                            backgroundColor: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '1.5rem',
-                            color: '#333',// Color del ícono de cierre
-                        }}
-                    >
-                        &#x2716; {/* Este es el símbolo de la equis (X) como ícono de cierre */}
+            <div className="custom-modal" style={{ background: 'white', width: `${popupWidth}px`, position: 'absolute', top: '50px', left: '50px' }} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
+                <div className="modal-header" style={{ cursor: 'move' }} onMouseDown={handleMouseDown}>
+                <div style={{ height: 20, display: 'flex',  alignItems: 'center' }}>
+                </div>
+                    <button onClick={closeFunction} style={{
+                                position: 'absolute',
+                                top: '10px',
+                                right: '10px',
+                                zIndex: 1,
+                                backgroundColor: 'transparent',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '1.5rem',
+                                color: '#333',// Color del ícono de cierre
+                            }}>
+                        &#x2716;
                     </button>
-                    <div style={{ width: '100%' }}>
-                        {contentComponent}
-                    </div>
+                </div>
+                <div className="modal-content" style={{ width: '100%' }}>
+                    {contentComponent}
                 </div>
             </div>
         );
@@ -101,6 +124,22 @@ const TrabajarConHistoricosSeguros = (props) => {
             setAccion(2)
             setIsPopupOpen(true);
         }
+        if (actionType === 'Cobros') {
+            setAccion(3)
+            setIsPopupOpen(true);
+        }
+        if (actionType === 'Facturas') {
+            setAccion(4)
+            setIsPopupOpen(true);
+        }
+        if (actionType === 'VisualizarFacturado') {
+            setAccion(5)
+            setIsPopupOpen(true);
+        }
+        if (actionType === 'VisualizarDistribuido') {
+            setAccion(6)
+            setIsPopupOpen(true);
+        }        
     };
 
     const columns = [
@@ -176,6 +215,26 @@ const TrabajarConHistoricosSeguros = (props) => {
             {Accion==2 && isPopupOpen && (
                 <div className="popup-background">
                     <CustomModal closeFunction={closePopup} contentComponent={<TrabajarConDescuentosHistorico closePopup={closePopup} ID ={rowSelectionModel.length > 0 ? rows.find((row) => row.Cabecera_ID === rowSelectionModel[0]).Cabecera_ID : null} PERIODO = {rowSelectionModel.length > 0 ? rows.find((row) => row.Cabecera_ID === rowSelectionModel[0]).Cabecera_Referencia : null} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} />} /*popupWidth={1050}*/ />
+                </div>
+            )}
+            {Accion==3 && isPopupOpen && (
+                <div className="popup-background">
+                    <CustomModal closeFunction={closePopup} contentComponent={<TrabajarConCobroAseguradoraHistorico closePopup={closePopup} ID ={rowSelectionModel.length > 0 ? rows.find((row) => row.Cabecera_ID === rowSelectionModel[0]).Cabecera_ID : null} PERIODO = {rowSelectionModel.length > 0 ? rows.find((row) => row.Cabecera_ID === rowSelectionModel[0]).Cabecera_Referencia : null} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} />} /*popupWidth={1050}*/ />
+                </div>
+            )}
+            {Accion==4 && isPopupOpen && (
+                <div className="popup-background">
+                    <CustomModal closeFunction={closePopup} contentComponent={<TrabajarConFacturasHistorico closePopup={closePopup} ID ={rowSelectionModel.length > 0 ? rows.find((row) => row.Cabecera_ID === rowSelectionModel[0]).Cabecera_ID : null} PERIODO = {rowSelectionModel.length > 0 ? rows.find((row) => row.Cabecera_ID === rowSelectionModel[0]).Cabecera_Referencia : null} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} />} /*popupWidth={1050}*/ />
+                </div>
+            )}
+            {Accion==5 && isPopupOpen && (
+                <div className="popup-background">
+                    <CustomModal closeFunction={closePopup} contentComponent={<TrabajarConLoFacturadoHistorico closePopup={closePopup} ID ={rowSelectionModel.length > 0 ? rows.find((row) => row.Cabecera_ID === rowSelectionModel[0]).Cabecera_ID : null} PERIODO = {rowSelectionModel.length > 0 ? rows.find((row) => row.Cabecera_ID === rowSelectionModel[0]).Cabecera_Referencia : null} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} />} /*popupWidth={1050}*/ />
+                </div>
+            )}
+            {Accion==6 && isPopupOpen && (
+                <div className="popup-background">
+                    <CustomModal closeFunction={closePopup} contentComponent={<TrabajarConLaDistribucionHistorico closePopup={closePopup} ID ={rowSelectionModel.length > 0 ? rows.find((row) => row.Cabecera_ID === rowSelectionModel[0]).Cabecera_ID : null} PERIODO = {rowSelectionModel.length > 0 ? rows.find((row) => row.Cabecera_ID === rowSelectionModel[0]).Cabecera_Referencia : null} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} />} /*popupWidth={1050}*/ />
                 </div>
             )}
             <Button

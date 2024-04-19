@@ -10,8 +10,6 @@ import DigitarCentroCosto from './DigitarCentroCosto';
 
 const TrabajarConCobroAseguradora = (props) => {
     const {textoNick, NombreUsuario , CodPerfil, CorreoUsuario} = props;
-    const [CorreoGerente,setCorreoGerente] = useState("");
-    const [CorreoSupervisor,setCorreoSupervisor] = useState("");
     const [CodigoSeguroCompSal,setCodigoSeguroCompSal] = useState("");
     const [CodigoSeguroCata,setCodigoSeguroCata] = useState("");
     const [rowSelectionModel1, setRowSelectionModel1] = useState([]);
@@ -70,91 +68,6 @@ const TrabajarConCobroAseguradora = (props) => {
 
     //Invoco al servicio web institucional de Guía de Procesos para obtener dperry@socovesa y aherrera@socovesa...
     const fetchData = useCallback(async () => {
-        try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Key: 'kfjshf84rwkjfsdklgfw49@254325jhsdgft',
-                    ParametrosEntradaWs1: {
-                        Guia: {
-                            Cod: '1',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        },
-                        Sistema: {
-                            Cod: '31',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        }
-                    }
-                })
-            });
-
-            const dataInst = await response.json();
-            //console.log('Datos recibidos:', JSON.stringify(dataInst, null, 2)); // Mostrar datos en la consola
-            if (dataInst.ParametrosSalidaWs1) {
-                setCorreoGerente(dataInst.ParametrosSalidaWs1.Caracteres);
-            }
-        } catch (error) {
-            console.error('Error de red:', error);
-            // Maneja el error de red, muestra un mensaje de error o realiza otras acciones necesarias.
-        }
-        try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Key: 'kfjshf84rwkjfsdklgfw49@254325jhsdgft',
-                    ParametrosEntradaWs1: {
-                        Guia: {
-                            Cod: '2',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        },
-                        Sistema: {
-                            Cod: '31',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        }
-                    }
-                })
-            });
-
-            const dataInst = await response.json();
-
-            if (dataInst.ParametrosSalidaWs1) {
-                setCorreoSupervisor(dataInst.ParametrosSalidaWs1.Caracteres);
-            }
-        } catch (error) {
-            console.error('Error de red:', error);
-        }
-
-        //gianiiiiiii
         //Obtengo los códigos del sistema UNO referentes a los seguros complementario y catastróficos
         try {
             //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
@@ -342,7 +255,6 @@ const TrabajarConCobroAseguradora = (props) => {
         { field: 'CobroAseguradoraExcel_ID',        headerAlign: 'center',  headerName: 'Id.', width: 80 , align: 'center' },
         { field: 'Apellido_Nombre',                     headerAlign: 'left',    headerName: 'Nombre', width: 220,align: 'left'},
         { field: 'NIF',                                 headerAlign: 'center',  headerName: 'NIF', width: 100 , align: 'center'},
-        //{ field: 'Sociedad',       type: 'number',      headerAlign: 'center',  headerName: 'Sociedad', width: 100 , align: 'center'},
         { field: 'NombreEmpresa',                       headerAlign: 'left',    headerName: 'Empresa', width: 220 , align: 'left'},
         { field: 'CentroCoste',                         headerAlign: 'left',    headerName: 'C. Costo', width: 200 , align: 'left'},
         { field: 'Denominacion',                        headerAlign: 'left',    headerName: 'Denominación', width: 185 , align: 'left'},
@@ -375,13 +287,6 @@ const TrabajarConCobroAseguradora = (props) => {
         setOpenAlertaOK({
             open: true,
             message: "Se han exportado todos los registros al Excel.",
-        });
-    };
-
-    const handleOpenAlertaOK = () => {
-        setOpenAlertaOK({
-            open: true,
-            message: "Se han exportado los registros seleccionados al Excel.",
         });
     };
 
@@ -474,7 +379,7 @@ const TrabajarConCobroAseguradora = (props) => {
                 ):null}
                 {isPopupOpen && (
                     <div className="popup-background">
-                        <CustomModal closeFunction={closePopup} contentComponent={<SubirCobroAseguradoraExcel closePopup={closePopup} Seg1={CodigoSeguroCompSal} Seg2={CodigoSeguroCata} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} CorreoSupervisor={CorreoSupervisor} />} popupWidth={1500} />
+                        <CustomModal closeFunction={closePopup} contentComponent={<SubirCobroAseguradoraExcel closePopup={closePopup} Seg1={CodigoSeguroCompSal} Seg2={CodigoSeguroCata} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} />} popupWidth={1500} />
                     </div>
                 )}
                 {CodPerfil === '10' || CodPerfil === '3102' ? (
@@ -503,10 +408,6 @@ const TrabajarConCobroAseguradora = (props) => {
                     Exportar a Excel
                 </Button>
             </div>
-                        
-
-
-
         </Box>
         <Snackbar
             open={openAlertaError.open}
@@ -560,7 +461,6 @@ const TrabajarConCobroAseguradora = (props) => {
                         </div>
                     );
                     },
-                    //más configuraciones...
                 },
                 }}
                 initialState={{

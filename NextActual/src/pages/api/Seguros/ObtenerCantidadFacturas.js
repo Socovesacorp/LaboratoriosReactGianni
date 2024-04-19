@@ -17,21 +17,21 @@ export default async function handler(req, res) {
       const Cabecera_Id = req.query.Cabecera_Id;
       const pool = await sql.connect(dbConfig);
       const query = `
-        SELECT COUNT(1) AS Cantidad FROM Seguros_Trabajadores(NOLOCK) WHERE Cabecera_Id = ${Cabecera_Id}        
+        SELECT COUNT(1) AS Cantidad FROM Seguros_Facturas(NOLOCK) WHERE Cabecera_Id = ${Cabecera_Id}
       `;
 
       const result = await pool.request().query(query);
       sql.close();
 
       // La fecha se devuelve en el formato dd/mm/yyyy
-      const CantidadTrabajadores = result.recordset[0].Cantidad || 0;
+      const CantidadFacturas = result.recordset[0].Cantidad || 0;
 
-      //console.log('Máxima fecha de los campos especificados (solo fecha):', maxFechaInicio);
-      console.log('ObtenerCantidadTrabajadores.js');
-      res.status(200).json({ CantidadTrabajadores });
+      //console.log('ObtenerCantidadFacturas:', CantidadFacturasExcel);
+      console.log('ObtenerCantidadFacturas.js');
+      res.status(200).json({ CantidadFacturas });
     } catch (error) {
-      console.error('Error al obtener la cantidad de los trabajadores de los campos especificados (solo count):', error);
-      res.status(500).json({ error: 'Error al obtener la cantidad de los trabajadores de los campos especificados (solo count)', details: error.message });
+      console.error('Error al obtener la cantidad de las Facturas de los campos especificados (solo count):', error);
+      res.status(500).json({ error: 'Error al obtener la cantidad de las Facturas de los campos especificados (solo count)', details: error.message });
     }
   } else {
     res.status(405).end();

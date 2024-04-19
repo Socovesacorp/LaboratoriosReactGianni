@@ -5,243 +5,23 @@ import * as XLSX                                    from 'xlsx';
 import LlamadosApis                                 from '../ManejarDatosApis/LlamadosApis';
 import SubirFacturas                                from './SubirFacturas';
 import '../../hojas-de-estilo/MantenedorExcels.css';
-import DigitarCentroCosto from './DigitarCentroCosto';
 
 const TrabajarConFacturas = (props) => {
     const {textoNick, NombreUsuario , CodPerfil, CorreoUsuario} = props;
-    const [CorreoGerente,setCorreoGerente] = useState("");
-    const [CorreoSupervisor,setCorreoSupervisor] = useState("");
-    const [CodigoSeguroCompSal,setCodigoSeguroCompSal] = useState("");
-    const [CodigoSeguroCata,setCodigoSeguroCata] = useState("");
     const [rowSelectionModel1, setRowSelectionModel1] = useState([]);
     const [rows, setRows] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false); 
     const [openAlertaError, setOpenAlertaError] = useState({ open: false, message: "" });
     const [openAlertaOK, setOpenAlertaOK] = useState({ open: false, message: "" });
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [isPopupOpenCGenerados, setIsPopupOpenCGenerados] = useState(false);
     const [CantFacts, setCantFacts] = useState(null);
-    const [totalSi, setTotalSi] = useState(0);
-    const [totalNo, setTotalNo] = useState(0);
-    const [shouldUpdate, setShouldUpdate] = useState(true);
-
     const [SubidaTrabajadores , setSubidaTrabajadores]=useState(null);
     const [SubidaDescuentosTrabajadores , setSubidaDescuentosTrabajadores]=useState(null);
     const [SubidaCobroAseguradora , setSubidaCobroAseguradora]=useState(null);
     const [FacturadoValido , setFacturadoValido]=useState(null);
     const [DistribucionValido , setDistribucionValido]=useState(null);
 
-    let refresco = 0;
-
-    const openPopupCGenerados = () => {
-        if (rowSelectionModel1.length === 0) {
-            setOpenAlertaError({
-                open: true,
-                message: "No se ha seleccionado un registro. Acción inválida.",
-            });
-        } else if (rowSelectionModel1.length > 1) {
-            setOpenAlertaError({
-                open: true,
-                message: "Solo puedes seleccionar un registro a la vez para para asignarle un Centro de Costo.",
-            });
-        } else if (rows.find((row) => row.FacturasExcel_Id === rowSelectionModel1[0]).Existe !== 'No') {
-            setOpenAlertaError({
-                open: true,
-                message: "Solo puedes seleccionar un registro con 'Existe' igual a 'No' para asignarle un Centro de Costo.",
-            });
-        } else {
-            setIsPopupOpenCGenerados(true);
-        }
-    };
-
-    const closePopupCGenerados = (puedo) => {
-        setIsPopupOpenCGenerados(false);
-        if (puedo === 1) {
-            setOpenAlertaOK({
-                open: true,
-                message: "Se ha asignado un Centro de Costo al Trabajador.",
-            });
-            setRowSelectionModel1([]);
-        }
-        
-        cargarDatos(); 
-    };
-
-    //Invoco al servicio web institucional de Guía de Procesos para obtener dperry@socovesa y aherrera@socovesa...
-    const fetchData = useCallback(async () => {
-        try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Key: 'kfjshf84rwkjfsdklgfw49@254325jhsdgft',
-                    ParametrosEntradaWs1: {
-                        Guia: {
-                            Cod: '1',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        },
-                        Sistema: {
-                            Cod: '31',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        }
-                    }
-                })
-            });
-
-            const dataInst = await response.json();
-            //console.log('Datos recibidos:', JSON.stringify(dataInst, null, 2)); // Mostrar datos en la consola
-            if (dataInst.ParametrosSalidaWs1) {
-                setCorreoGerente(dataInst.ParametrosSalidaWs1.Caracteres);
-            }
-        } catch (error) {
-            console.error('Error de red:', error);
-            // Maneja el error de red, muestra un mensaje de error o realiza otras acciones necesarias.
-        }
-        try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Key: 'kfjshf84rwkjfsdklgfw49@254325jhsdgft',
-                    ParametrosEntradaWs1: {
-                        Guia: {
-                            Cod: '2',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        },
-                        Sistema: {
-                            Cod: '31',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        }
-                    }
-                })
-            });
-
-            const dataInst = await response.json();
-
-            if (dataInst.ParametrosSalidaWs1) {
-                setCorreoSupervisor(dataInst.ParametrosSalidaWs1.Caracteres);
-            }
-        } catch (error) {
-            console.error('Error de red:', error);
-        }
-
-        //gianiiiiiii
-        //Obtengo los códigos del sistema UNO referentes a los seguros complementario y catastróficos
-        try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Key: 'kfjshf84rwkjfsdklgfw49@254325jhsdgft',
-                    ParametrosEntradaWs1: {
-                        Guia: {
-                            Cod: '3',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        },
-                        Sistema: {
-                            Cod: '31',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        }
-                    }
-                })
-            });
-
-            const dataInst = await response.json();
-
-            if (dataInst.ParametrosSalidaWs1) {
-                setCodigoSeguroCompSal(dataInst.ParametrosSalidaWs1.Entero);
-            }
-        } catch (error) {
-            console.error('Error de red:', error);
-        }
-
-        try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Key: 'kfjshf84rwkjfsdklgfw49@254325jhsdgft',
-                    ParametrosEntradaWs1: {
-                        Guia: {
-                            Cod: '4',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        },
-                        Sistema: {
-                            Cod: '31',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        }
-                    }
-                })
-            });
-
-            const dataInst = await response.json();
-
-            if (dataInst.ParametrosSalidaWs1) {
-                setCodigoSeguroCata(dataInst.ParametrosSalidaWs1.Entero);
-            }
-        } catch (error) {
-            console.error('Error de red:', error);
-        }
-
-    });
-
-    const openPopup = () => {
+        const openPopup = () => {
         setIsPopupOpen(true);
     };
 
@@ -256,7 +36,6 @@ const TrabajarConFacturas = (props) => {
         }
         cargarDatos(); 
     };
-
     
     const CustomModal = ({ closeFunction, contentComponent, popupWidth }) => {
         return (
@@ -276,7 +55,7 @@ const TrabajarConFacturas = (props) => {
                             border: 'none',
                             cursor: 'pointer',
                             fontSize: '1.5rem',
-                            color: '#333',// Color del ícono de cierre
+                            color: '#333',
                         }}
                     >
                         &#x2716; {/* Este es el símbolo de la equis (X) como ícono de cierre */}
@@ -290,7 +69,6 @@ const TrabajarConFacturas = (props) => {
     };
 
     const cargarDatos = async () => {
-        fetchData();
         try {
             const token = await LlamadosApis.ObtenerToken();
             try {
@@ -302,14 +80,11 @@ const TrabajarConFacturas = (props) => {
                 setFacturadoValido(FacturadoValido)
                 setDistribucionValido(DistribucionValido)
 
-                refresco = refresco + 1;
                 const Cantidad = await LlamadosApis.obtenerCantidadFacturasExcel(token);
                 setCantFacts(Cantidad);
                 const data = await LlamadosApis.ObtenerDatosFacturasExcel(token);
                 setRows(data);
                 setIsDataLoaded(true);
-
-                setShouldUpdate(false);
             } catch (errorObtenerDatos) {
                 setOpenAlertaError({
                     open: true,
@@ -327,14 +102,8 @@ const TrabajarConFacturas = (props) => {
     };
 
     useEffect(() => {
-        if (shouldUpdate) {
-            cargarDatos();
-        }
-        //const totalSiCount = rows.filter((row) => row.Existe === "Si").length;
-        //const totalNoCount = rows.filter((row) => row.Existe === "No").length;
-        //setTotalSi(totalSiCount);
-        //setTotalNo(totalNoCount);
-    }, [shouldUpdate,rows]);
+        cargarDatos();
+    }, []);
 
     const columns = [
         { field: 'FacturasExcel_Id',            headerAlign: 'center',  headerName: 'Id.', width: 80 , align: 'center' , renderCell: (params) => (
@@ -372,17 +141,6 @@ const TrabajarConFacturas = (props) => {
         setOpenAlertaOK({
             open: true,
             message: "Se han exportado todos los registros al Excel.",
-        });
-    };
-      
-        
-      
-       
-
-    const handleOpenAlertaOK = () => {
-        setOpenAlertaOK({
-            open: true,
-            message: "Se han exportado los registros seleccionados al Excel.",
         });
     };
 
@@ -475,7 +233,7 @@ const TrabajarConFacturas = (props) => {
                 ):null}
                 {isPopupOpen && (
                     <div className="popup-background">
-                        <CustomModal closeFunction={closePopup} contentComponent={<SubirFacturas closePopup={closePopup} Seg1={CodigoSeguroCompSal} Seg2={CodigoSeguroCata} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} CorreoSupervisor={CorreoSupervisor} />} popupWidth={1160} />
+                        <CustomModal closeFunction={closePopup} contentComponent={<SubirFacturas closePopup={closePopup} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} />} popupWidth={1160} />
                     </div>
                 )}
                 <Button
@@ -529,19 +287,12 @@ const TrabajarConFacturas = (props) => {
                 noRowsLabel: 'No hay filas para mostrar',
                 MuiTablePagination: {
                     labelDisplayedRows: ({ from, to, count }) => {
-                    const spaces = '\u00A0'.repeat(80);
                     return (
                         <div>
-                            <span style={{ color: '#1976D2' , textShadow: '0.25px 0 0 #1976D2, 0 0.25px 0 #1976D2, -0.25px 0 0 #1976D2, 0 -0.25px 0 #1976D2' }}>
-                                
-                            </span>
-                            {spaces}
                             {from} - {to} de un total de {count}
-                      
                         </div>
                     );
                     },
-                    //más configuraciones...
                 },
                 }}
                 initialState={{

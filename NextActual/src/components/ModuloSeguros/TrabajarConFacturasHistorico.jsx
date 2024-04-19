@@ -3,37 +3,38 @@ import { DataGrid }                                 from '@mui/x-data-grid';
 import { Button, Snackbar , Box}                    from '@mui/material';
 import * as XLSX                                    from 'xlsx';
 import LlamadosApis                                 from '../ManejarDatosApis/LlamadosApis';
+import SubirFacturas                                from './SubirFacturas';
 import '../../hojas-de-estilo/MantenedorExcels.css';
 
-const TrabajarConTrabajadoresHistorico = (props) => {
+const TrabajarConFacturasHistorico = (props) => {
     const {textoNick, NombreUsuario , CodPerfil, CorreoUsuario, ID , PERIODO} = props;
-    const [rowSelectionModel, setRowSelectionModel] = useState([]);
+    const [rowSelectionModel1, setRowSelectionModel1] = useState([]);
     const [rows, setRows] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false); 
-    const [openAlertaError, setOpenAlertaError] = useState(false);
-    const [CantTrabE, setCantTrabE] = useState(null);
+    const [openAlertaError, setOpenAlertaError] = useState({ open: false, message: "" });
     const [openAlertaOK, setOpenAlertaOK] = useState({ open: false, message: "" });
+    const [CantFacts, setCantFacts] = useState(null);
 
     const cargarDatos = async () => {
         try {
             const token = await LlamadosApis.ObtenerToken();
             try {
-                const CantidadT = await LlamadosApis.ObtenerCantidadTrabajadores(token,ID);
-                setCantTrabE(CantidadT);
-                const data = await LlamadosApis.ObtenerDatosTrabajadores(token,ID);
+                const Cantidad = await LlamadosApis.ObtenerCantidadFacturas(token,ID);
+                setCantFacts(Cantidad);
+                const data = await LlamadosApis.ObtenerDatosFacturas(token,ID);
                 setRows(data);
                 setIsDataLoaded(true);
             } catch (errorObtenerDatos) {
                 setOpenAlertaError({
                     open: true,
-                    message: "Error en API. Consultar a T.I.",
+                    message: "Error en Api. Consultar a T.I.",
                 });
-                console.error('Error al obtener Datos de los Trabajadores:', errorObtenerDatos);
+                console.error('Error al obtener Datos de los Descuentos Excel:', errorObtenerDatos);
             }
         } catch (errorToken) {
             setOpenAlertaError({
                 open: true,
-                message: "Error en API. Consultar a T.I.",
+                message: "Error en Api. Consultar a T.I.",
             });
             console.error('Error al Obtener Token:', errorToken);
         }
@@ -44,36 +45,32 @@ const TrabajarConTrabajadoresHistorico = (props) => {
     }, []);
 
     const columns = [
-        { field: 'Trabajadores_ID',                headerAlign: 'center',  headerName: 'Id.', width: 80 , align: 'center' , renderCell: (params) => (
+        { field: 'Facturas_Id',            headerAlign: 'center',  headerName: 'Id.', width: 80 , align: 'center' , renderCell: (params) => (
             <div style={{ height: 50, display: 'flex',  alignItems: 'center' }}>
-                {params.value}
+                {params.value.toLocaleString('en-US')}
             </div>
         ),},
-        { field: 'Estado',                              headerAlign: 'left',  headerName: 'Estado', width: 80,align: 'left'},
-        { field: 'NIF',                                 headerAlign: 'center',  headerName: 'NIF', width: 100 , align: 'center'},
-        { field: 'Nombres',                             headerAlign: 'left',  headerName: 'Nombre', width: 180 , align: 'left'},
-        { field: 'ApellidoPaterno',                     headerAlign: 'left',  headerName: 'Apellido Paterno', width: 140 , align: 'left'},
-        { field: 'ApellidoMaterno',                     headerAlign: 'left',  headerName: 'Apellido Materno', width: 140 , align: 'left'},
-        { field: 'CentroCoste',                         headerAlign: 'left',  headerName: 'C. Costo', width: 180 , align: 'left'},
-        { field: 'Denominacion',                        headerAlign: 'left',  headerName: 'Denominación', width: 140 , align: 'left'},
-        { field: 'NombreProyecto',                      headerAlign: 'left',  headerName: 'Proyecto', width: 160 , align: 'left'},
-        { field: 'CodigoProyecto',                      headerAlign: 'center',  headerName: 'Código del Proyecto', width: 180 , align: 'center'},
-    ];
+        { field: 'Sociedad_RazonSocial',        headerAlign: 'center',  headerName: 'Empresa', width: 380 , align: 'left'},
+        { field: 'Sociedad_Rut',                headerAlign: 'center',  headerName: 'Rut', width: 100 , align: 'CENTER'},
+        { field: 'Factura_Nro',                 headerAlign: 'center',  headerName: 'Factura', width: 100 , align: 'center' },
+        { field: 'Factura_Exento',        type: 'number',      headerAlign: 'right',  headerName: 'Exento', width: 100 ,    align: 'right' , valueFormatter: (params) => {   if (params.value !== null && params.value !== undefined) { return params.value.toLocaleString('en-US');   } else {  return 0; } }, },
+        { field: 'Factura_Neto',          type: 'number',      headerAlign: 'right',  headerName: 'Neto', width: 100 ,      align: 'right' , valueFormatter: (params) => {   if (params.value !== null && params.value !== undefined) { return params.value.toLocaleString('en-US');   } else {  return 0; } }, },
+        { field: 'Factura_Iva',           type: 'number',      headerAlign: 'right',  headerName: 'Iva', width: 100 ,       align: 'right' , valueFormatter: (params) => {   if (params.value !== null && params.value !== undefined) { return params.value.toLocaleString('en-US');   } else {  return 0; } }, },
+        { field: 'Factura_Total',         type: 'number',      headerAlign: 'right',  headerName: 'Total', width: 104 ,     align: 'right' , valueFormatter: (params) => {   if (params.value !== null && params.value !== undefined) { return params.value.toLocaleString('en-US');   } else {  return 0; } }, },
+      ];
   
-    const getRowId = (row) => row.Trabajadores_ID;
+    const getRowId = (row) => row.Facturas_Id;
 
     const handleExportarAexcel = () => {
         const adjustedRowsData = rows.map((row) => ({
-            'Id.': row.TrabajadoresExcel_ID,
-            'Estado': row.Estado,
-            'NIF': row.NIF,
-            'Nombre': row.Nombres,
-            'Apellido Paterno': row.ApellidoPaterno,
-            'Apellido Materno': row.ApellidoMaterno,
-            'C. Costo': row.CentroCoste,
-            'Denominación': row.Denominacion,
-            'Proyecto': row.NombreProyecto,
-            'Código del Proyecto': row.CodigoProyecto,
+            Id: row.Facturas_Id,
+            Empresa: row.Sociedad_RazonSocial,
+            Rut: row.Sociedad_Rut,
+            Factura: row.Factura_Nro,
+            Exento: row.Factura_Exento,
+            Neto: row.Factura_Neto,
+            Iva: row.Factura_Iva,
+            Total: row.Factura_Total,
           }));
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.json_to_sheet(adjustedRowsData); // Exporta todas las filas
@@ -93,34 +90,28 @@ const TrabajarConTrabajadoresHistorico = (props) => {
         });
     };
 
-    const handleRowSelectionModelChange = (newRowSelectionModel) => {
-        setRowSelectionModel(newRowSelectionModel);
-        
+    const handleRowSelectionModelChange1 = (newRowSelectionModel1) => {
+        setRowSelectionModel1(newRowSelectionModel1);
     };
 
     return (
         <div style={{ marginLeft: '15px' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-            <h1 style={{ marginTop: '0px', marginBottom: '40px' }}>Trabajadores del Periodo: {PERIODO}</h1>
+            <h1 style={{ marginTop: '0px', marginBottom: '40px', marginRight: '450px' }}>Facturas del Periodo: {PERIODO}</h1>
         </div>
         <h4 style={{ marginTop: '0px', marginBottom: '40px' }}>
-            {CantTrabE === null
-            ? 'Actualmente no existe información de Trabajadores.'
-            : `Existen ${CantTrabE.toLocaleString('en-US')} Trabajadores procesados.`}
+            {CantFacts === null
+            ? 'Actualmente no existe información de Facturas Recibidas.'
+            : `Existen ${CantFacts.toLocaleString('en-US')} Facturas Recibidas.`}
         </h4>
-        
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleExportarAexcel}
-                disabled={!isDataLoaded} // Deshabilitar si rows está vacío
-                style={{ marginLeft: CodPerfil === '10' || CodPerfil === '3102' ? '5px' : '0', }}
-            >
-                Exportar a Excel
-            </Button>
-        </div>
-
+        <Button
+            variant="contained"
+            color="primary"
+            onClick={handleExportarAexcel}
+            disabled={!isDataLoaded} // Deshabilitar si rows está vacío
+        >
+            Exportar a Excel
+        </Button>
         <Snackbar
             open={openAlertaError.open}
             autoHideDuration={3000}
@@ -146,13 +137,13 @@ const TrabajarConTrabajadoresHistorico = (props) => {
             }}
         />
         <div style={{ marginTop: '5px' }}>
-            <div className="custom-data-grid-container" style={{ height: '400px', width: '1430px', marginRight: '15px', marginBottom: '15px' }}>
+            <div className="custom-data-grid-container" style={{ height: '450px', width: '1100px' , marginRight: '15px' , marginBottom:'15px' }}>
             <DataGrid
                 rows={rows}
                 columns={columns}
                 //checkboxSelection
-                onRowSelectionModelChange={handleRowSelectionModelChange}
-                rowSelectionModel={rowSelectionModel}
+                onRowSelectionModelChange={handleRowSelectionModelChange1}
+                rowSelectionModel={rowSelectionModel1}
                 getRowHeight={() => 'auto'}
                 resizable
                 className="custom-data-grid"
@@ -170,9 +161,7 @@ const TrabajarConTrabajadoresHistorico = (props) => {
                 },
                 }}
                 initialState={{
-                    
                 pagination: {
-                    
                     paginationModel: { page: 0, pageSize: 100 },
                 },
                 }}
@@ -180,8 +169,9 @@ const TrabajarConTrabajadoresHistorico = (props) => {
             />
             </div>
         </div>
-        </div>
+
+    </div>
     );
 };
 
-export default TrabajarConTrabajadoresHistorico;
+export default TrabajarConFacturasHistorico;

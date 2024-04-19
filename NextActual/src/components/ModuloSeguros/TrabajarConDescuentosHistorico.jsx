@@ -8,208 +8,29 @@ import '../../hojas-de-estilo/MantenedorExcels.css';
 
 const TrabajarConDescuentos = (props) => {
     const {textoNick, NombreUsuario , CodPerfil, CorreoUsuario, ID , PERIODO} = props;
-    const [CodigoSeguroCompSal,setCodigoSeguroCompSal] = useState("");
-    const [CodigoSeguroCata,setCodigoSeguroCata] = useState("");
     const [rowSelectionModel1, setRowSelectionModel1] = useState([]);
     const [rowSelectionModel2, setRowSelectionModel2] = useState([]);
     const [rows, setRows] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false); 
     const [openAlertaError, setOpenAlertaError] = useState({ open: false, message: "" });
     const [openAlertaOK, setOpenAlertaOK] = useState({ open: false, message: "" });
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [isPopupOpenCGenerados, setIsPopupOpenCGenerados] = useState(false);
     const [CantDescE, setCantDescE] = useState(null);
     const [rowsAgrupados, setRowsAgrupados] = useState([]);
-    const [totalSi, setTotalSi] = useState(0);
-    const [totalNo, setTotalNo] = useState(0);
-    const [shouldUpdate, setShouldUpdate] = useState(true);
-
-    const openPopupCGenerados = () => {
-        if (rowSelectionModel1.length === 0) {
-            setOpenAlertaError({
-                open: true,
-                message: "No se ha seleccionado un registro. Acción inválida.",
-            });
-        } else if (rowSelectionModel1.length > 1) {
-            setOpenAlertaError({
-                open: true,
-                message: "Solo puedes seleccionar un registro a la vez para para asignarle un Centro de Costo.",
-            });
-        } else if (rows.find((row) => row.DescuentosAlPersonalExcel_ID === rowSelectionModel1[0]).Existe !== 'No') {
-            setOpenAlertaError({
-                open: true,
-                message: "Solo puedes seleccionar un registro con 'Existe' igual a 'No' para asignarle un Centro de Costo.",
-            });
-        } else {
-            setIsPopupOpenCGenerados(true);
-        }
-    };
-
-    const closePopupCGenerados = (puedo) => {
-        setIsPopupOpenCGenerados(false);
-        if (puedo === 1) {
-            setOpenAlertaOK({
-                open: true,
-                message: "Se ha asignado un Centro de Costo al Trabajador.",
-            });
-            setRowSelectionModel1([]);
-        }
-        
-        cargarDatos(); 
-    };
-
-    const fetchData = useCallback(async () => {
-        //Obtengo los códigos del sistema UNO referentes a los seguros complementario y catastróficos
-        try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Key: 'kfjshf84rwkjfsdklgfw49@254325jhsdgft',
-                    ParametrosEntradaWs1: {
-                        Guia: {
-                            Cod: '3',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        },
-                        Sistema: {
-                            Cod: '31',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        }
-                    }
-                })
-            });
-
-            const dataInst = await response.json();
-
-            if (dataInst.ParametrosSalidaWs1) {
-                setCodigoSeguroCompSal(dataInst.ParametrosSalidaWs1.Entero);
-            }
-        } catch (error) {
-            console.error('Error de red:', error);
-        }
-
-        try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Key: 'kfjshf84rwkjfsdklgfw49@254325jhsdgft',
-                    ParametrosEntradaWs1: {
-                        Guia: {
-                            Cod: '4',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        },
-                        Sistema: {
-                            Cod: '31',
-                            Estado: {
-                                Cod: '1',
-                                Grupo: {
-                                    Cod: '1'
-                                }
-                            }
-                        }
-                    }
-                })
-            });
-
-            const dataInst = await response.json();
-
-            if (dataInst.ParametrosSalidaWs1) {
-                setCodigoSeguroCata(dataInst.ParametrosSalidaWs1.Entero);
-            }
-        } catch (error) {
-            console.error('Error de red:', error);
-        }
-
-    });
-
-    const openPopup = () => {
-        setIsPopupOpen(true);
-    };
-
-    const closePopup = (puedo) => {
-        setIsPopupOpen(false);
-        if (puedo === 1) {
-            setOpenAlertaOK({
-                open: true,
-                message: "Se ha procesado la información de los Descuentos a los Trabajadores.",
-            });
-            setRowSelectionModel1([]);
-        }
-        cargarDatos(); 
-    };
-    
-    const CustomModal = ({ closeFunction, contentComponent, popupWidth }) => {
-        
-        return (
-            <div className="custom-modal" style={{ background: 'white', width: `${popupWidth}px` }}>
-                <div className="modal-content">
-                    {/* Aquí puedes agregar el contenido personalizado */}
-                    {/*<h2>Título del Popup</h2>*/}
-                    {/*<p>Contenido personalizado</p>*/}
-                    <button
-                        onClick={closeFunction}
-                        style={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: '10px',
-                            zIndex: 1,
-                            backgroundColor: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '1.5rem',
-                            color: '#333',// Color del ícono de cierre
-                        }}
-                    >
-                        &#x2716; {/* Este es el símbolo de la equis (X) como ícono de cierre */}
-                    </button>
-                    <div style={{ width: '100%' }}>
-                        {contentComponent}
-                    </div>
-                </div>
-            </div>
-        );
-    };
 
     const cargarDatos = async () => {
-        fetchData();
         try {
             const token = await LlamadosApis.ObtenerToken();
             try {
-                const CantidadD = await LlamadosApis.obtenerCantidadDescuentosExcel(token);
+                const CantidadD = await LlamadosApis.ObtenerCantidadDescuentos(token,ID);
                 setCantDescE(CantidadD);
-                const data = await LlamadosApis.ObtenerDatosDescuentosExcel_Existe(token);
+                const data = await LlamadosApis.ObtenerDatosDescuentos(token,ID);
                 setRows(data);
                 setIsDataLoaded(true);
                 
-                const dataAgrupados = await LlamadosApis.ObtenerDatosDescuentosExcelAgrupados(token);
+                const dataAgrupados = await LlamadosApis.ObtenerDatosDescuentosAgrupados(token,ID);
                 const dataAgrupadosConId = dataAgrupados.map((row, index) => ({ ...row, id: index + 1 }));
                 setRowsAgrupados(dataAgrupadosConId);
                 
-                setShouldUpdate(false);
             } catch (errorObtenerDatos) {
                 setOpenAlertaError({
                     open: true,
@@ -227,22 +48,15 @@ const TrabajarConDescuentos = (props) => {
     };
 
     useEffect(() => {
-        if (shouldUpdate) {
-            cargarDatos();
-        }
-        const totalSiCount = rows.filter((row) => row.Existe === "Si").length;
-        const totalNoCount = rows.filter((row) => row.Existe === "No").length;
-        setTotalSi(totalSiCount);
-        setTotalNo(totalNoCount);
-    }, [shouldUpdate,rows]);
+        cargarDatos();
+    }, []);
 
     const columns = [
-        { field: 'Existe',                              headerAlign: 'center',  headerName: '¿Existe?', width: 150 , align: 'center' , renderCell: (params) => (
+        { field: 'DescuentosAlPersonal_ID',        headerAlign: 'center',  headerName: 'Id.', width: 80 , align: 'center' , renderCell: (params) => (
             <div style={{ height: 50, display: 'flex',  alignItems: 'center' }}>
                 {params.value}
             </div>
         ),},
-        { field: 'DescuentosAlPersonalExcel_ID',        headerAlign: 'center',  headerName: 'Id.', width: 80 , align: 'center' },
         { field: 'Apellido_Nombre',                     headerAlign: 'left',    headerName: 'Nombre', width: 180,align: 'left'},
         { field: 'NIF',                                 headerAlign: 'center',  headerName: 'NIF', width: 100 , align: 'center'},
         { field: 'Sociedad',       type: 'number',      headerAlign: 'center',  headerName: 'Sociedad', width: 100 , align: 'center'},
@@ -264,7 +78,7 @@ const TrabajarConDescuentos = (props) => {
         { field: 'SumaImporte',    type: 'number',      headerAlign: 'right', headerName: 'Importe', width: 200, align: 'right' , valueFormatter: (params) => {   return params.value.toLocaleString('en-US'); }, },
     ];
 
-    const getRowId = (row) => row.DescuentosAlPersonalExcel_ID;
+    const getRowId = (row) => row.DescuentosAlPersonal_ID;
     const getRowId2 = (row) => row.id;
 
     const handleExportarAexcel = () => {
@@ -278,10 +92,9 @@ const TrabajarConDescuentos = (props) => {
             });
             return;
         }
-    
+
         const adjustedRowsData = selectedRowsData.map((row) => ({
-            '¿Existe?': row.Existe,
-            'Id.': row.DescuentosAlPersonalExcel_ID,
+            'Id.': row.DescuentosAlPersonal_ID,
             'Nombre': row.Apellido_Nombre,
             'NIF': row.NIF,
             'Sociedad': row.Sociedad,
@@ -292,7 +105,7 @@ const TrabajarConDescuentos = (props) => {
             'Importe': row.Importe,
             'Tipo de Seguro': row.TipoSeguro,
         }));
-    
+
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.json_to_sheet(adjustedRowsData);
         XLSX.utils.book_append_sheet(wb, ws, 'Datos Seleccionados');
@@ -350,7 +163,7 @@ const TrabajarConDescuentos = (props) => {
 
     return (
         <div style={{ marginLeft: '15px' }}>
-            <h1 style={{ marginTop: '40px', marginBottom: '40px' }}>Descuentos a Trabajadores del Periodo: {PERIODO}</h1>
+            <h1 style={{ marginTop: '0px', marginBottom: '40px' }}>Descuentos a Trabajadores del Periodo: {PERIODO}</h1>
             <h4 style={{ marginTop: '0px', marginBottom: '40px' }}>
                 {CantDescE === null
                 ? 'Actualmente no existe información de Descuentos a los Trabajadores.'
@@ -406,13 +219,8 @@ const TrabajarConDescuentos = (props) => {
                     noRowsLabel: 'No hay filas para mostrar',
                     MuiTablePagination: {
                         labelDisplayedRows: ({ from, to, count }) => {
-                        const spaces = '\u00A0'.repeat(80);
                         return (
                             <div>
-                                <span style={{ color: '#1976D2' , textShadow: '0.25px 0 0 #1976D2, 0 0.25px 0 #1976D2, -0.25px 0 0 #1976D2, 0 -0.25px 0 #1976D2' }}>
-                                    Encontrados: {totalSi} / NO Encontrados: {totalNo}
-                                </span>
-                                {spaces}
                                 {from} - {to} de un total de {count}
                         
                             </div>
@@ -456,11 +264,8 @@ const TrabajarConDescuentos = (props) => {
                         noRowsLabel: 'No hay filas para mostrar',
                         MuiTablePagination: {
                             labelDisplayedRows: ({ from, to, count }) => {
-                            const spaces = '\u00A0'.repeat(50); // Utiliza el carácter especial para espacio no rompible
                             return (
                                 <div>
-                                
-                                {spaces}
                                 {from} - {to} de un total de {count}
                                 </div>
                             );

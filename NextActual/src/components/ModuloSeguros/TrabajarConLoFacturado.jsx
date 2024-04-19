@@ -15,7 +15,6 @@ const TrabajarConLoFacturado = (props) => {
     const [isDataLoaded, setIsDataLoaded] = useState(false); 
     const [openAlertaError, setOpenAlertaError] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [isPopupOpenCGenerados, setIsPopupOpenCGenerados] = useState(false);
     const [CantTrabE, setCantTrabE] = useState(null);
     const [openAlertaOK, setOpenAlertaOK] = useState({ open: false, message: "" });
     const [SubidaTrabajadores , setSubidaTrabajadores]=useState(null);
@@ -237,7 +236,6 @@ const TrabajarConLoFacturado = (props) => {
         ),}
     ];
   
-
     const getRowId = (row) => row.Sociedad_Cod;
 
     const handleExportarAexcel = () => {
@@ -289,7 +287,7 @@ const TrabajarConLoFacturado = (props) => {
     return (
         <div style={{ marginLeft: '15px' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <h1 style={{ marginTop: '40px', marginBottom: '40px', marginRight: '752px' }}>Revisar lo Facturado</h1>
+                <h1 style={{ marginTop: '40px', marginBottom: '40px', marginRight: '352px' }}>Revisar lo Facturado</h1>
                 <table style={{ borderCollapse: 'collapse' }}>
                     <tr>
                         <td style={{ padding: '8px' , textAlign: 'center'}}>
@@ -445,7 +443,6 @@ const TrabajarConLoFacturado = (props) => {
                                     </div>
                                 );
                                 },
-                                //más configuraciones...
                             },
                             }}
                             initialState={{
@@ -456,36 +453,36 @@ const TrabajarConLoFacturado = (props) => {
                             pageSizeOptions={[]}
                             getCellClassName={(params) => {
                                 if (params.field === 'TotalFactura') {
-                                    return 'IluminarAzul'; // Aplicar clase para la celda específica
+                                    return 'IluminarAzul';
                                 }
                                 if (params.field === 'RestaCobro') {
-                                    return 'IluminarAmarillo'; // Aplicar clase para la celda específica
+                                    return 'IluminarAmarillo';
                                 }
                                 if (params.field === 'TotalExento') {
-                                    return 'IluminarAzul'; // Aplicar clase para la celda específica
+                                    return 'IluminarAzul';
                                 }
                                 if (params.field === 'RestaExento') {
-                                    return 'IluminarAmarillo'; // Aplicar clase para la celda específica
+                                    return 'IluminarAmarillo';
                                 }
                                 if (params.field === 'TotalAfecto') {
-                                    return 'IluminarAzul'; // Aplicar clase para la celda específica
+                                    return 'IluminarAzul';
                                 }
                                 if (params.field === 'RestaAfecto') {
-                                    return 'IluminarAmarillo'; // Aplicar clase para la celda específica
+                                    return 'IluminarAmarillo';
                                 }
                                 if (params.field === 'TotalIva') {
-                                    return 'IluminarAzul'; // Aplicar clase para la celda específica
+                                    return 'IluminarAzul';
                                 }
                                 if (params.field === 'RestaIva') {
-                                    return 'IluminarAmarillo'; // Aplicar clase para la celda específica
+                                    return 'IluminarAmarillo';
                                 }
                                 if (params.field === 'TotalCE') {
-                                    return 'IluminarAzul'; // Aplicar clase para la celda específica
+                                    return 'IluminarAzul';
                                 }
                                 if (params.field === 'RestaCE') {
-                                    return 'IluminarAmarillo'; // Aplicar clase para la celda específica
+                                    return 'IluminarAmarillo';
                                 }
-                                return ''; // No aplicar clase a otras celdas
+                                return '';
                             }}
                         />
                     </Box>

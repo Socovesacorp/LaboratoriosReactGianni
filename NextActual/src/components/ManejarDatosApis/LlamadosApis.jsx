@@ -679,6 +679,28 @@ const ObtenerSociedadesFacturadasExcel = async (token) => {
     }
 };
 
+const ObtenerSociedadesFacturadasH = async (token,Cabecera_Id) => {
+    try {
+        const dataResponse = await fetch(`${API_URL}/api/Seguros/ObtenerSociedadesFacturadasH?Cabecera_Id=${Cabecera_Id}`, {
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+            timeout: 120000, // Establece un timeout de 2 minutos
+        });
+
+        if (!dataResponse.ok) {
+            console.error('Error de red:', dataResponse.statusText);
+            throw new Error('Error de red al obtener los datos de las SociedadesFacturadasH');
+        }else{                
+            const data = await dataResponse.json();
+            return data;
+        }
+    } catch (error) {
+        console.error('Error al obtener datos de las SociedadesFacturadasH:', error);
+        throw error;
+    }
+};
+
 const ObtenerDistribucionesExcel = async (token) => {
     try {
         const dataResponse = await fetch(`${API_URL}/api/Seguros/ObtenerDistribucionesExcel`, {
@@ -697,6 +719,28 @@ const ObtenerDistribucionesExcel = async (token) => {
         }
     } catch (error) {
         console.error('Error al obtener datos de las DistribucionesExcel:', error);
+        throw error;
+    }
+};
+
+const ObtenerDistribuciones = async (token,Cabecera_Id) => {
+    try {
+        const dataResponse = await fetch(`${API_URL}/api/Seguros/ObtenerDistribuciones?Cabecera_Id=${Cabecera_Id}`, {
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+            timeout: 120000,
+        });
+
+        if (!dataResponse.ok) {
+            console.error('Error de red:', dataResponse.statusText);
+            throw new Error('Error de red al obtener los datos de las Distribuciones');
+        }else{                
+            const data = await dataResponse.json();
+            return data;
+        }
+    } catch (error) {
+        console.error('Error al obtener datos de las Distribuciones:', error);
         throw error;
     }
 };
@@ -820,6 +864,31 @@ async function ObtenerCantidadSociedadesFacturadas(token) {
     return null;
 }
 
+async function ObtenerCantidadSociedadesFacturadasH(token,Cabecera_Id) {
+    try {
+        const response = await fetch(`${API_URL}/api/Seguros/ObtenerCantidadSociedadesFacturadasH?Cabecera_Id=${Cabecera_Id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            timeout: 120000, // Establece un timeout de 2 minutos
+        });
+  
+        if (response.ok) {
+            const data = await response.json();
+            if (data.CantidadSociedadesFacturadas) {
+                return data.CantidadSociedadesFacturadas;
+            } else {
+                console.error('Error desde LlamadosApis. Función ObtenerCantidadSociedadesFacturadasH. La respuesta de la API no contiene el campo: CantidadSociedadesFacturadas:', data);
+            }
+        } else {
+            console.error('Error desde LlamadosApis. Función ObtenerCantidadSociedadesFacturadasH. No se pudo obtenerToken:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error desde LlamadosApis. Función ObtenerCantidadSociedadesFacturadasH. Error al obtener la CantidadSociedadesFacturadas:', error);
+    }
+    return null;
+}
+
 async function EliminarTrabajadoresExcel(token) {
     try {
         const response = await fetch(`${API_URL}/api/Seguros/EliminarTrabajadoresExcel`, {
@@ -892,6 +961,28 @@ const ObtenerDatosDescuentosExcel_Existe = async (token) => {
     }
 };
 
+const ObtenerDatosDescuentos = async (token,Cabecera_Id) => {
+    try {
+        const dataResponse = await fetch(`${API_URL}/api/Seguros/ObtenerDescuentos?Cabecera_Id=${Cabecera_Id}`, {
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+            timeout: 120000, // Establece un timeout de 2 minutos
+        });
+
+        if (!dataResponse.ok) {
+            console.error('Error de red:', dataResponse.statusText);
+            throw new Error('Error de red al obtener los datos de los Descuentos');
+        }else{                
+            const data = await dataResponse.json();
+            return data;
+        }
+    } catch (error) {
+        console.error('Error al obtener datos de los Descuentos:', error);
+        throw error;
+    }
+};
+
 const ObtenerDatosFacturasExcel = async (token) => {
     try {
         const dataResponse = await fetch(`${API_URL}/api/Seguros/ObtenerFacturasExcel`, {
@@ -914,6 +1005,28 @@ const ObtenerDatosFacturasExcel = async (token) => {
     }
 };
 
+const ObtenerDatosFacturas = async (token,Cabecera_Id) => {
+    try {
+        const dataResponse = await fetch(`${API_URL}/api/Seguros/ObtenerFacturas?Cabecera_Id=${Cabecera_Id}`, {
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+            timeout: 120000, // Establece un timeout de 2 minutos
+        });
+
+        if (!dataResponse.ok) {
+            console.error('Error de red:', dataResponse.statusText);
+            throw new Error('Error de red al obtener los datos de las Facturas');
+        }else{                
+            const data = await dataResponse.json();
+            return data;
+        }
+    } catch (error) {
+        console.error('Error al obtener datos de las Facturas:', error);
+        throw error;
+    }
+};
+
 const ObtenerDatosDescuentosExcelAgrupados = async (token) => {
     try {
         const dataResponse = await fetch(`${API_URL}/api/Seguros/ObtenerDescuentosExcelAgrupados`, {
@@ -932,6 +1045,28 @@ const ObtenerDatosDescuentosExcelAgrupados = async (token) => {
         }
     } catch (error) {
         console.error('Error al obtener datos de los Descuentos Excel Agrupados:', error);
+        throw error;
+    }
+};
+
+const ObtenerDatosDescuentosAgrupados = async (token,Cabecera_Id) => {
+    try {
+        const dataResponse = await fetch(`${API_URL}/api/Seguros/ObtenerDescuentosAgrupados?Cabecera_Id=${Cabecera_Id}`, {
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+            timeout: 120000, // Establece un timeout de 2 minutos
+        });
+
+        if (!dataResponse.ok) {
+            console.error('Error de red:', dataResponse.statusText);
+            throw new Error('Error de red al obtener los datos de los Descuentos Agrupados');
+        }else{                
+            const data = await dataResponse.json();
+            return data;
+        }
+    } catch (error) {
+        console.error('Error al obtener datos de los Descuentos Agrupados:', error);
         throw error;
     }
 };
@@ -983,6 +1118,31 @@ async function obtenerCantidadDescuentosExcel(token) {
     return null;
 }
 
+async function ObtenerCantidadDescuentos(token,Cabecera_Id) {
+    try {
+        const response = await fetch(`${API_URL}/api/Seguros/ObtenerCantidadDescuentos?Cabecera_Id=${Cabecera_Id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            timeout: 120000, // Establece un timeout de 2 minutos
+        });
+  
+        if (response.ok) {
+            const data = await response.json();
+            if (data.CantidadDescuentos) {
+                return data.CantidadDescuentos;
+            } else {
+                console.error('Error desde LlamadosApis. Función ObtenerCantidadDescuentos. La respuesta de la API no contiene el campo: CantidadDescuentosExcel:', data);
+            }
+        } else {
+            console.error('Error desde LlamadosApis. Función ObtenerCantidadDescuentos. No se pudo obtenerToken:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error desde LlamadosApis. Función ObtenerCantidadDescuentos. Error al obtener la cantidad de Descuentos en Excel:', error);
+    }
+    return null;
+}
+
 async function obtenerCantidadFacturasExcel(token) {
     try {
         const response = await fetch(`${API_URL}/api/Seguros/ObtenerCantidadFacturasExcel`, {
@@ -1004,6 +1164,31 @@ async function obtenerCantidadFacturasExcel(token) {
         }
     } catch (error) {
         console.error('Error desde LlamadosApis. Función ObtenerCantidadFacturasExcel. Error al obtener la cantidad de Facturas en Excel:', error);
+    }
+    return null;
+}
+
+async function ObtenerCantidadFacturas(token,Cabecera_Id) {
+    try {
+        const response = await fetch(`${API_URL}/api/Seguros/ObtenerCantidadFacturas?Cabecera_Id=${Cabecera_Id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            timeout: 120000, // Establece un timeout de 2 minutos
+        });
+  
+        if (response.ok) {
+            const data = await response.json();
+            if (data.CantidadFacturas) {
+                return data.CantidadFacturas;
+            } else {
+                console.error('Error desde LlamadosApis. Función ObtenerCantidadFacturas. La respuesta de la API no contiene el campo: CantidadFacturasExcel:', data);
+            }
+        } else {
+            console.error('Error desde LlamadosApis. Función ObtenerCantidadFacturas. No se pudo obtenerToken:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error desde LlamadosApis. Función ObtenerCantidadFacturas. Error al obtener la cantidad de Facturas en Excel:', error);
     }
     return null;
 }
@@ -1083,6 +1268,31 @@ async function obtenerCantidadCobroAseguradoraExcel(token) {
     return null;
 }
 
+async function ObtenerCantidadCobroAseguradora(token,Cabecera_Id) {
+    try {
+        const response = await fetch(`${API_URL}/api/Seguros/ObtenerCantidadCobroAseguradora?Cabecera_Id=${Cabecera_Id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            timeout: 120000, // Establece un timeout de 2 minutos
+        });
+  
+        if (response.ok) {
+            const data = await response.json();
+            if (data.CantidadCobroAseguradora) {
+                return data.CantidadCobroAseguradora;
+            } else {
+                console.error('Error desde LlamadosApis. Función ObtenerCantidadCobroAseguradoraExcel. La respuesta de la API no contiene el campo: CantidadCobroAseguradoraExcel:', data);
+            }
+        } else {
+            console.error('Error desde LlamadosApis. Función ObtenerCantidadCobroAseguradoraExcel. No se pudo obtenerToken:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error desde LlamadosApis. Función ObtenerCantidadCobroAseguradoraExcel. Error al obtener la cantidad de CobroAseguradora en Excel:', error);
+    }
+    return null;
+}
+
 const ObtenerDatosCobroAseguradoraExcel_Existe = async (token) => {
     try {
         const dataResponse = await fetch(`${API_URL}/api/Seguros/ObtenerCobroAseguradoraExcel_Existe`, {
@@ -1101,6 +1311,28 @@ const ObtenerDatosCobroAseguradoraExcel_Existe = async (token) => {
         }
     } catch (error) {
         console.error('Error al obtener datos de los Cobro Aseguradora Excel_Existe:', error);
+        throw error;
+    }
+};
+
+const ObtenerDatosCobroAseguradora = async (token,Cabecera_Id) => {
+    try {
+        const dataResponse = await fetch(`${API_URL}/api/Seguros/ObtenerCobroAseguradora?Cabecera_Id=${Cabecera_Id}`, {
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+            timeout: 120000, // Establece un timeout de 2 minutos
+        });
+
+        if (!dataResponse.ok) {
+            console.error('Error de red:', dataResponse.statusText);
+            throw new Error('Error de red al obtener los datos de los Cobro Aseguradora');
+        }else{                
+            const data = await dataResponse.json();
+            return data;
+        }
+    } catch (error) {
+        console.error('Error al obtener datos de los Cobro Aseguradora:', error);
         throw error;
     }
 };
@@ -1150,8 +1382,12 @@ export default {
     ObtenerCantidadTrabajadores,
     EliminarTrabajadoresExcel,
     ObtenerDatosDescuentosExcel_Existe,
+    ObtenerDatosDescuentos,
     ObtenerDatosDescuentosExcelAgrupados,
+    ObtenerDatosDescuentosAgrupados,
     obtenerCantidadDescuentosExcel,
+    ObtenerCantidadDescuentos,
+    ObtenerCantidadFacturas,
     obtenerCantidadFacturasExcel,
     EliminarDescuentosExcel,
     ObtenerEmpresaYnombreDadoIDexcel,
@@ -1161,15 +1397,21 @@ export default {
     ABM_SOCIEDAD,
     ValidarYguardarCentroDeCosto,
     EliminarCobroAseguradoraExcel,
+    ObtenerCantidadCobroAseguradora,
     obtenerCantidadCobroAseguradoraExcel,
+    ObtenerDatosCobroAseguradora,
     ObtenerDatosCobroAseguradoraExcel_Existe,
     ObtenerCantidadSociedadesFacturadas,
+    ObtenerCantidadSociedadesFacturadasH,
     ObtenerSociedadesFacturadasExcel,
+    ObtenerSociedadesFacturadasH,
     ObtenerDistribucionesExcel,
+    ObtenerDistribuciones,
     ObtenerPEPs,
     ObtenerSociedades,
     EliminarFacturasExcel,
     ObtenerDatosFacturasExcel,
+    ObtenerDatosFacturas,
     CerrarPeriodo,
     ObtenerSegurosCabeceras
 };
