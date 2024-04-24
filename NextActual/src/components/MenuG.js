@@ -1,17 +1,13 @@
-//Real...
-
 import React, { useState, useEffect , useCallback , useRef } from 'react';
 import { Navbar, Nav, NavDropdown }   from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MenuG.css';
-/*import MantenedorProyectos            from '../components/MantenedorProyectos';
-import ContadorClics                  from '../components/ContadorClics';*/
 import { SignOutButton } from "./SignOutButton";
 import { useMsal } from "@azure/msal-react"; //Esto lo utilizo en una opción de menú que permita cerrar sesion desde un Celular...
 
 function MenuG( {textoNick , CorreoUsuario}) {
 
-  const [MenuSeleccionado, setMenuSeleccionado] = useState(false); // Nuevo estado para el componente "MantenedorProyectos"
+  const [MenuSeleccionado, setMenuSeleccionado] = useState(false);
   const [Menus, setMenus] = useState([]);
   const [NombreUsuario, setNombreUsuario] = useState("");
   const [Perfil, setPerfil] = useState("");
@@ -27,6 +23,19 @@ function MenuG( {textoNick , CorreoUsuario}) {
   //const components = Menus.filter(menu => menu.TipoCod === '7').reduce((acc, menu) => {
   //  return { ...acc, [menu.ObjetoNom]: require('../components/' + menu.ObjetoNom).default };
   //}, {});
+  function getUrlPermisos() {
+    if (typeof window !== 'undefined') {
+      const { hostname } = window.location;
+      if (hostname === 'ucp-cobranzas-qa.brazilsouth.cloudapp.azure.com') {
+        return 'https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetPermisosAzure';
+      } else if (hostname === 'ucp-cobranzas.brazilsouth.cloudapp.azure.com') {
+        return 'https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetPermisosAzure';
+      } else{
+        return 'https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetPermisosAzure';
+      }
+    }      
+    return '';
+  }
 
   const components = Menus.filter(menu => menu.TipoCod === '7').reduce((acc, menu) => {
     let component;
@@ -69,9 +78,7 @@ function MenuG( {textoNick , CorreoUsuario}) {
     console.log('Texto Recibido es: ' + textoNick);
     if (textoNick !== '')
     {
-        //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetPermisosAzure', {
-          const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetPermisosAzure', {
-        //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetPermisosAzure',{
+        const response = await fetch(getUrlPermisos(),{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -129,9 +136,9 @@ function MenuG( {textoNick , CorreoUsuario}) {
     {
       fetchData(); // Si el valor de textoNick no está vacío, llama a la función fetchData() para obtener los datos del servidor.
     }
-    window.addEventListener('resize', ActualizarAnchosYaltos); // Agrega un evento para escuchar cambios en el tamaño de la ventana y llama a ActualizarAnchosYaltos() cuando ocurre.
+    //gianni ver window.addEventListener('resize', ActualizarAnchosYaltos); // Agrega un evento para escuchar cambios en el tamaño de la ventana y llama a ActualizarAnchosYaltos() cuando ocurre.
     return () => {
-      window.removeEventListener('resize', ActualizarAnchosYaltos); // Elimina el evento de cambio de tamaño al desmontar el componente para evitar fugas de memoria.
+    //gianni ver  window.removeEventListener('resize', ActualizarAnchosYaltos); // Elimina el evento de cambio de tamaño al desmontar el componente para evitar fugas de memoria.
     };
   }, [fetchData, textoNick, EstaMenuAbierto]);
 

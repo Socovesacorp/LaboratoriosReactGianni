@@ -3,13 +3,13 @@ import { DataGrid }                                 from '@mui/x-data-grid';
 import { Button, Snackbar , Box}                    from '@mui/material';
 import * as XLSX                                    from 'xlsx';
 import LlamadosApis                                 from '../ManejarDatosApis/LlamadosApis';
-import SubirTrabajadoresExcel                       from './SubirTrabajadoresExcel';
+import AvisarAucp                                   from './AvisarAucp';
 import '../../hojas-de-estilo/MantenedorExcels.css';
 
 const TrabajarConLoFacturado = (props) => {
     const {textoNick, NombreUsuario , CodPerfil, CorreoUsuario} = props;
-    const [CorreoGerente,setCorreoGerente] = useState("");
-    const [CorreoSupervisor,setCorreoSupervisor] = useState("");
+    const [CorreosEncargadosUCP,setCorreosEncargadosUCP] = useState("");
+    const [CorreosEncargadosSocial,setCorreosEncargadosSocial] = useState("");
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
     const [rows, setRows] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false); 
@@ -23,12 +23,24 @@ const TrabajarConLoFacturado = (props) => {
     const [FacturadoValido , setFacturadoValido]=useState(null);
     const [DistribucionValido , setDistribucionValido]=useState(null);
 
+    function getUrlGuia() {
+        if (typeof window !== 'undefined') {
+          const { hostname } = window.location;
+          if (hostname === 'ucp-cobranzas-qa.brazilsouth.cloudapp.azure.com') {
+            return 'https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          } else if (hostname === 'ucp-cobranzas.brazilsouth.cloudapp.azure.com') {
+            return 'https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          } else{
+            return 'https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          }
+        }      
+        return '';
+    }
+
     //Invoco al servicio web institucional de Guía de Procesos para obtener dperry@socovesa y aherrera@socovesa...
     const fetchData = useCallback(async () => {
         try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
+            const response = await fetch(getUrlGuia(), {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'
@@ -37,7 +49,7 @@ const TrabajarConLoFacturado = (props) => {
                     Key: 'kfjshf84rwkjfsdklgfw49@254325jhsdgft',
                     ParametrosEntradaWs1: {
                         Guia: {
-                            Cod: '1',
+                            Cod: '5',
                             Estado: {
                                 Cod: '1',
                                 Grupo: {
@@ -59,18 +71,14 @@ const TrabajarConLoFacturado = (props) => {
             });
 
             const dataInst = await response.json();
-            //console.log('Datos recibidos:', JSON.stringify(dataInst, null, 2)); // Mostrar datos en la consola
             if (dataInst.ParametrosSalidaWs1) {
-                setCorreoGerente(dataInst.ParametrosSalidaWs1.Caracteres);
+                setCorreosEncargadosUCP(dataInst.ParametrosSalidaWs1.Caracteres);
             }
         } catch (error) {
             console.error('Error de red:', error);
-            // Maneja el error de red, muestra un mensaje de error o realiza otras acciones necesarias.
         }
         try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
+            const response = await fetch(getUrlGuia(), {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'
@@ -79,7 +87,7 @@ const TrabajarConLoFacturado = (props) => {
                     Key: 'kfjshf84rwkjfsdklgfw49@254325jhsdgft',
                     ParametrosEntradaWs1: {
                         Guia: {
-                            Cod: '2',
+                            Cod: '6',
                             Estado: {
                                 Cod: '1',
                                 Grupo: {
@@ -103,7 +111,7 @@ const TrabajarConLoFacturado = (props) => {
             const dataInst = await response.json();
 
             if (dataInst.ParametrosSalidaWs1) {
-                setCorreoSupervisor(dataInst.ParametrosSalidaWs1.Caracteres);
+                setCorreosEncargadosSocial(dataInst.ParametrosSalidaWs1.Caracteres);
             }
         } catch (error) {
             console.error('Error de red:', error);
@@ -116,7 +124,6 @@ const TrabajarConLoFacturado = (props) => {
 
     const closePopup = (puedo) => {
         setIsPopupOpen(false);
-        //cargarDatos(); 
         if (puedo === 1) {
             setOpenAlertaOK({
                 open: true,
@@ -362,7 +369,7 @@ const TrabajarConLoFacturado = (props) => {
                     ):null}
                     {isPopupOpen && (
                         <div className="popup-background">
-                            <CustomModal closeFunction={closePopup} contentComponent={<SubirTrabajadoresExcel closePopup={closePopup} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} CorreoSupervisor={CorreoSupervisor} />} popupWidth={1500} />
+                            <CustomModal closeFunction={closePopup} contentComponent={<AvisarAucp closePopup={closePopup} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} CorreosEncargadosUCP={CorreosEncargadosUCP} CorreosEncargadosSocial={CorreosEncargadosSocial} />} popupWidth={1500} />
                         </div>
                     )}
                     <Button

@@ -24,12 +24,25 @@ const TrabajarConEnvios = (props) => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [processing, setProcessing] = useState(false);
 
+
+    function getUrlGuia() {
+        if (typeof window !== 'undefined') {
+          const { hostname } = window.location;
+          if (hostname === 'ucp-cobranzas-qa.brazilsouth.cloudapp.azure.com') {
+            return 'https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          } else if (hostname === 'ucp-cobranzas.brazilsouth.cloudapp.azure.com') {
+            return 'https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          } else{
+            return 'https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          }
+        }      
+        return '';
+    }
+
     //Invoco al servicio web institucional de Guía de Procesos para obtener dperry@socovesa y aherrera@socovesa...
     const fetchData = useCallback(async () => {
         try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
+            const response = await fetch(getUrlGuia(), {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'
@@ -69,9 +82,7 @@ const TrabajarConEnvios = (props) => {
             // Maneja el error de red, muestra un mensaje de error o realiza otras acciones necesarias.
         }
         try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
+            const response = await fetch(getUrlGuia(), {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'

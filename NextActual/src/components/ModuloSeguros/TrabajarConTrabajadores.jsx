@@ -8,8 +8,6 @@ import '../../hojas-de-estilo/MantenedorExcels.css';
 
 const TrabajarConTrabajadores = (props) => {
     const {textoNick, NombreUsuario , CodPerfil, CorreoUsuario} = props;
-    const [CorreoGerente,setCorreoGerente] = useState("");
-    const [CorreoSupervisor,setCorreoSupervisor] = useState("");
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
     const [rows, setRows] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false); 
@@ -239,7 +237,7 @@ const TrabajarConTrabajadores = (props) => {
                 ):null}
                 {isPopupOpen && (
                     <div className="popup-background">
-                        <CustomModal closeFunction={closePopup} contentComponent={<SubirTrabajadoresExcel closePopup={closePopup} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} CorreoSupervisor={CorreoSupervisor} />} popupWidth={1500} />
+                        <CustomModal closeFunction={closePopup} contentComponent={<SubirTrabajadoresExcel closePopup={closePopup} textoNick={textoNick} NombreUsuario={NombreUsuario} CodPerfil={CodPerfil} CorreoUsuario={CorreoUsuario} />} popupWidth={1500} />
                     </div>
                 )}
                 <Button

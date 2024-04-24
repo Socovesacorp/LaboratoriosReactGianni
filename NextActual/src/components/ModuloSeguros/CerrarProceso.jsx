@@ -1,9 +1,8 @@
 import React, { useState, useEffect , useCallback , useRef }               from 'react';
-import TextField                                    from '@mui/material/TextField';
 import { Button, Snackbar , Box}                    from '@mui/material';
 import LlamadosApis                                 from '../ManejarDatosApis/LlamadosApis';
 import '../../hojas-de-estilo/MantenedorExcels.css';
-import filtroFunctions from '../ManejarDatosApis/filtroFunctions'; 
+
 
 const CerrarProceso = (props) => {
     const {textoNick, NombreUsuario , CodPerfil, CorreoUsuario, TodoAlDia} = props;

@@ -15,9 +15,16 @@ export const msalConfig = {
     auth: {
         clientId: "81c9ec27-3de7-49bf-881d-7ce0dbcea687",
         authority: "https://login.microsoftonline.com/13a5374c-6b9e-4c64-9bd8-db78dc15f5b9",
-        redirectUri: typeof window !== "undefined" && window.location.hostname === "localhost" ? "http://localhost:3000" : "https://ucp-cobranzas-qa.brazilsouth.cloudapp.azure.com",
-        //redirectUri: "http://localhost:3000",
-        //redirectUri: "https://reactapp-test.brazilsouth.cloudapp.azure.com"
+        redirectUri: (() => {
+            const hostname = typeof window !== "undefined" && window.location.hostname;
+            if (hostname === "localhost") {
+                return "http://localhost:3000";
+            } else if (hostname === "ucp-cobranzas-qa.brazilsouth.cloudapp.azure.com") {
+                return "https://ucp-cobranzas-qa.brazilsouth.cloudapp.azure.com";
+            } else if (hostname === "ucp-cobranzas.brazilsouth.cloudapp.azure.com") {
+                return "https://ucp-cobranzas.brazilsouth.cloudapp.azure.com";
+            } 
+        })(),
     },
     cache: {
         cacheLocation: "sessionStorage", // This configures where your cache will be stored

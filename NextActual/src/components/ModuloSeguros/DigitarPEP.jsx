@@ -3,7 +3,6 @@ import TextField                                    from '@mui/material/TextFiel
 import { Button, Snackbar , Box}                    from '@mui/material';
 import LlamadosApis                                 from '../ManejarDatosApis/LlamadosApis';
 import '../../hojas-de-estilo/MantenedorExcels.css';
-import filtroFunctions from '../ManejarDatosApis/filtroFunctions'; 
 
 const DigitarPEP = (props) => {
     const {textoNick, NombreUsuario , CodPerfil, CorreoUsuario, Sociedad_Cod , Razon_Social , Proyecto_Nombre} = props;

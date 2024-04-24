@@ -42,7 +42,7 @@ export default async function ObtenerEstadoSubidaTrabajadores(req, res) {
                 SubidaTrabajadores: subidaTrabajadoresResult[0].SubidaTrabajadores > 0 ? 1 : 0,
                 SubidaDescuentosTrabajadores: subidaDescuentosResult[0].SubidaDescuentosTrabajadores === 0 && TotalSubidasDescuentosResult[0].TotalSubidasDescuentos > 0 && TotalGralResult[0].TotalGral>0 && TotalTrabNoEncontradoResult[0].TotalTrabNoEncontrado === 0 ? 1 : 0,
                 SubidaCobroAseguradora: TotalSubidasAseguradoraResult[0].TotalSubidasAseguradora > 0 && SubidaCobrosErrorResult[0].SubidaCobrosError === 0 ? 1 : 0,
-                FacturadoValido: FacturasSubidasResult[0].FacturasSubidas === SociedadesDistribuidasResult[0].SociedadesDistribuidas ? 1 : 0,
+                FacturadoValido: FacturasSubidasResult[0].FacturasSubidas === SociedadesDistribuidasResult[0].SociedadesDistribuidas && FacturasSubidasResult[0].FacturasSubidas > 0 ? 1 : 0,
                 DistribucionValido: TotalGralResult[0].TotalGral>0 && TotalTrabNoEncontradoResult[0].TotalTrabNoEncontrado === 0 && PepNoEncontradoResult[0].PepNoEncontrado === 0 ?  1 : 0
             };
             //console.log('response:', response);

@@ -7,7 +7,6 @@ import filtroFunctions from '../ManejarDatosApis/filtroFunctions';
 
 const DigitarCentroCosto = (props) => {
     const {textoNick, NombreUsuario , CodPerfil, CorreoUsuario, PasoCabeceraId , Descuento1oAporte2} = props;
-    const [isDataLoaded, setIsDataLoaded] = useState(false); 
     const [openAlertaError, setOpenAlertaError] = useState({ open: false, message: "" }); //aquiiiiii
     const [Apellido_Nombre, setApellido_Nombre] = useState('');
     const [NombreEmpresa, setNombreEmpresa] = useState('');

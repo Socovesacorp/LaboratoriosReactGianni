@@ -4,7 +4,6 @@ import { Button, Snackbar , Box}                    from '@mui/material';
 import * as XLSX                                    from 'xlsx';
 import LlamadosApis                                 from '../ManejarDatosApis/LlamadosApis';
 import SubirCobroAseguradoraExcel                   from './SubirCobroAseguradoraExcel';
-import TrabajarConTrabajadores                      from './TrabajarConTrabajadores';
 import '../../hojas-de-estilo/MantenedorExcels.css';
 import DigitarCentroCosto from './DigitarCentroCosto';
 
@@ -31,6 +30,20 @@ const TrabajarConCobroAseguradora = (props) => {
     const [DistribucionValido , setDistribucionValido]=useState(null);
 
     let refresco = 0;
+
+    function getUrlGuia() {
+        if (typeof window !== 'undefined') {
+          const { hostname } = window.location;
+          if (hostname === 'ucp-cobranzas-qa.brazilsouth.cloudapp.azure.com') {
+            return 'https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          } else if (hostname === 'ucp-cobranzas.brazilsouth.cloudapp.azure.com') {
+            return 'https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          } else{
+            return 'https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          }
+        }      
+        return '';
+    }
 
     const openPopupCGenerados = () => {
         if (rowSelectionModel1.length === 0) {
@@ -70,9 +83,7 @@ const TrabajarConCobroAseguradora = (props) => {
     const fetchData = useCallback(async () => {
         //Obtengo los códigos del sistema UNO referentes a los seguros complementario y catastróficos
         try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
+            const response = await fetch(getUrlGuia(), {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'
@@ -112,9 +123,7 @@ const TrabajarConCobroAseguradora = (props) => {
         }
 
         try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
+            const response = await fetch(getUrlGuia(), {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'

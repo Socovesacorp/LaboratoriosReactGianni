@@ -35,12 +35,24 @@ const TrabajarConLaDistribucion = (props) => {
         Proyecto_Nombre: null,
     });
 
+    function getUrlGuia() {
+        if (typeof window !== 'undefined') {
+          const { hostname } = window.location;
+          if (hostname === 'ucp-cobranzas-qa.brazilsouth.cloudapp.azure.com') {
+            return 'https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          } else if (hostname === 'ucp-cobranzas.brazilsouth.cloudapp.azure.com') {
+            return 'https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          } else{
+            return 'https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure';
+          }
+        }      
+        return '';
+    }
+
     //Invoco al servicio web institucional de Guía de Procesos para obtener dperry@socovesa y aherrera@socovesa...
     const fetchData = useCallback(async () => {
         try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
+            const response = await fetch(getUrlGuia(), {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'
@@ -79,9 +91,7 @@ const TrabajarConLaDistribucion = (props) => {
             console.error('Error de red:', error);
         }
         try {
-            //const response = await fetch('http://wservicesdes.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            const response = await fetch('https://wservicesqa.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
-            //const response = await fetch('https://wservicescorp.brazilsouth.cloudapp.azure.com/rest/WsRetGuiaProcesosAzure', {
+            const response = await fetch(getUrlGuia(), {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'
@@ -228,8 +238,8 @@ const TrabajarConLaDistribucion = (props) => {
     const columns = [
         { field: 'Id',                                                  headerAlign: 'center',  headerName: 'Id', width: 50 , align: 'center' },
         { field: 'Sociedad_Cod',                                        headerAlign: 'center',  headerName: 'Sociedad', width: 100 , align: 'center' },
-        { field: 'Sociedad_RazonSocial',                                headerAlign: 'left',  headerName: 'Razón Social', width: 205,align: 'left'},
-        { field: 'CentroCoste',                                         headerAlign: 'center',  headerName: 'Centro', width: 105,align: 'left'},
+        { field: 'Sociedad_RazonSocial',                                headerAlign: 'left',  headerName: 'Razón Social', width: 195,align: 'left'},
+        { field: 'CentroCoste',                                         headerAlign: 'center',  headerName: 'Centro', width: 115,align: 'left'},
         { field: 'Denominacion',                                        headerAlign: 'left',  headerName: 'Denominación', width: 195,align: 'left'},
         { field: 'NroTrabajadoresDescuento',            type: 'number', headerAlign: 'center',    headerName: '# Desc.', width: 90 , align: 'center' , valueFormatter: (params) => {
             if (params.value === 0) {
