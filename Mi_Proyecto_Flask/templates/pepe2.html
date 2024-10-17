@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de la Tabla</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .pepe2-body {
+            font-family: Arial, sans-serif;
+            padding-top: 300px; /* Espacio para evitar la superposición con la barra de navegación */
+            margin: 40px;
+            background-color: #f7f7f7;
+        }
+        .pepe2-title {
+            text-align: center;
+            color: #333;
+        }
+        .pepe2-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .pepe2-th, .pepe2-td {
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        .pepe2-th {
+            background-color: #66b2ff; /* Color celeste suavizado */
+            color: white;
+            border-right: 2px solid white; /* Líneas divisorias blancas entre los títulos */
+        }
+        .pepe2-th:last-child {
+            border-right: none; /* Quitar la línea divisoria al final */
+        }
+        .pepe2-tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .pepe2-tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        .pepe2-tr:hover {
+            background-color: #e6f7ff;
+        }
+        .pepe2-th:first-child, .pepe2-td:first-child {
+            border-top-left-radius: 10px;
+        }
+        .pepe2-th:last-child, .pepe2-td:last-child {
+            border-top-right-radius: 10px;
+        }
+    </style>
+</head>
+<body class="pepe2-body">
+    <table style="height: 50px; width: 100%; border-collapse: collapse;"></table>
+    <h1 class="pepe2-title">Resultados de la Tabla 2</h1>
+    <table class="pepe2-table">
+        <thead>
+            <tr class="pepe2-tr">
+                {% for column in columns %}
+                    <th class="pepe2-th">{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+                <tr class="pepe2-tr">
+                    {% for item in row %}
+                        <td class="pepe2-td">{{ item }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

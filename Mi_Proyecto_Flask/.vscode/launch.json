@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Flask",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/Home.py",
+            "args": [
+                "run"
+            ],
+            "jinja": true,
+            "env": {
+                "FLASK_APP": "Home.py",
+            },
+            "console": "integratedTerminal"
+            
+        }
+    ]
+}

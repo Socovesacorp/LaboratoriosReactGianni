@@ -1,0 +1,86 @@
+.navbar {
+    background: linear-gradient(to bottom, #1a5bbf, #013d9b, #1a5bbf);
+    border-color: #2196F3; /* Color del borde  #4582EC, #3932f6, #4582EC); */
+}
+
+.navbar-brand {
+    margin-right: 100px;
+    font-size: 16px; /* Tamaño de la marca del menú */
+}
+
+.navbar-nav .nav-link {
+    margin-right: 20px;
+    font-size: 16px; /* Tamaño de los enlaces del menú */
+}
+
+.navbar-nav .dropdown-item {
+    font-size: 14px; /* Tamaño de los ítems del dropdown */
+}
+
+#content {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+body {
+    padding-top: 5px; /* Ajusta el valor dependiendo de la altura de tu barra de navegación */
+}
+
+.navbar.fixed-top {
+    z-index: 1030; /* Asegura que la barra esté por encima del contenido */
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+    margin-left: 2px;
+    border-radius: 0 6px 6px 0;
+}
+
+/* Estilos para las flechas de los submenús */
+.dropdown-submenu > a::after {
+    content: ">"; /* Flecha hacia la derecha */
+    float: right;
+    border: none; /* Eliminar el borde predeterminado */
+    font-size: 12px !important; /* Tamaño fijo de la flecha con !important */
+    line-height: 1; /* Asegura que la línea de la flecha esté alineada correctamente */
+    margin-left: 5px; /* Espaciado para separar la flecha del texto */
+}
+
+/* Alinear correctamente las flechas para los submenús */
+.dropdown-submenu > a {
+    display: flex;
+    align-items: center;
+    font-size: inherit; 
+}
+
+/* Cambiar el color del texto de los submenús a azul */
+.dropdown-submenu .dropdown-item {
+    color: #3932f6; 
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+    border-radius: 0 6px 6px 0;
+    display: none;
+}
+
+.dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu > .dropdown-item:focus {
+    background-color: #343a40;
+    color: #fff;
+}

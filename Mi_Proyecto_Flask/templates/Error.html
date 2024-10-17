@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+        .error-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 48px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+        button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #c0392b;
+        }
+        button i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <table style="height: 30px; width: 100%; border-collapse: collapse;"></table>
+    <div class="error-container">
+        
+        <h1>Oops!</h1>
+        <p>{{ generic_message | safe }}</p>
+        {% if server_message %}
+            <p>Mensaje del Servidor: {{ server_message }}</p>
+        {% endif %}
+        <button onclick="goBack()"><i class="fas fa-arrow-left"></i> Volver</button>
+    </div>
+
+    <script>
+        function goBack() {
+            // Verifica si se ha recibido 'redirect_url', si no, usa history.back()
+            var redirectUrl = "{{ redirect_url | default('') }}";
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            } else {
+                window.history.back();
+            }
+        }
+    </script>
+</body>
+</html>
